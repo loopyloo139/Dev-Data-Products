@@ -1,0 +1,76 @@
+Presention.Rmd
+========================================================
+author: 
+date: 
+autosize: true
+
+ BMI code features
+========================================================
+
+
+
+- The app features four font sizes/type
+- Two input methods:slider and numeric
+- Calculates the BMI and outputs the result to the main page
+
+Function
+=======================================================
+The reactive component is a function the calculates 1.3 x weight / height^2
+This is a standard calculation but the is app doesn't replace any official medical apps that are available e.g. from the NHS in the UK.
+
+
+
+Ui code
+========================================================
+
+```{r}
+library(shiny)
+shinyUI(fluidPage(
+    titlePanel("Body Mass Indicator"),
+    sidebarLayout(
+        sidebarPanel(
+            h2("Enter your weight and height"),
+            
+            h1(numericInput("numeric", "Enter weight in kilos", 
+                         value = 75, min = 30, max = 150, step = 1)),
+            h1( "Enter height in metres"),
+            sliderInput("slider1", "Slide Me!", 1.3, 2.5, 0)
+        ),
+        mainPanel(
+            h1("BMI score"),
+            h1(textOutput("pred2"),
+            
+            h2("A BMI score between 18 and 24.9 is considered healthy"),
+            
+            
+            
+            h5("*App developed for Coursera Project not for healthcare use"))
+        )
+    )
+))
+```
+
+Server code 
+========================================================
+
+```{r, echo=FALSE}
+library(shiny)
+shinyServer(function(input, output) {
+    output$pred2<- renderText({
+        
+        
+        calc_sum <- reactive({
+            (input$numeric*1.3) / (input$slider1^2.5)
+        })
+        
+        #....
+        
+      output$pred2 <- renderText({
+            calc_sum()
+        })  
+            
+        
+        })
+    })
+
+```
